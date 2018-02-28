@@ -7,17 +7,17 @@ import torch.nn.functional as F
 import matplotlib.pyplot as plt
 
 def preprocessing():
-    df = pd.read_csv('titanic.csv')
+    df = pd.read_csv('./data/titanic/titanic.csv')
     df = df.dropna()
     df['Sex'] = df['Sex'].map({'female' : 1, 'male' : 0}).astype(int)
     df['Embarked'] = df['Embarked'].map({'S' : 2, 'C' : 1, 'Q' : 0}).astype(int)
     df = df.drop(['Name', 'PassengerId', 'Ticket', 'Cabin'], 1)
-    df.to_csv('titanic_processed.csv', index=False, header=False)
+    df.to_csv('./data/titanic/titanic_processed.csv', index=False, header=False)
 
 class Dataset(Dataset):
     def __init__(self):
         preprocessing()
-        xy = np.loadtxt('titanic_processed.csv', delimiter=',', dtype=np.float32)
+        xy = np.loadtxt('./data/titanic/titanic_processed.csv', delimiter=',', dtype=np.float32)
         self.x_data = torch.from_numpy(xy[:, 1:])
         self.y_data = torch.from_numpy(xy[:, [0]])
         self.len = len(xy)
