@@ -10,7 +10,7 @@ batch_size = 128
 
 def preprocessing():
     df = pd.read_csv('./data/otto/train.csv')
-    f = lambda x: int(x[6:])
+    f = lambda x: int(x[6:]) - 1
     df['target'] = df['target'].apply(f)
     df.to_csv('./data/otto/train_processed.csv', index=False, header=False)
 
@@ -21,7 +21,7 @@ class Dataset(Dataset):
                         delimiter=',', skiprows=1, dtype=np.float32)
         self.x_data = torch.from_numpy(xy[:, 1:-1])
         y = torch.from_numpy(xy[:, [-1]])
-        self.y_data = y.type(torch.LongTensor)
+        self.y_data = torch.squeeze(y.type(torch.LongTensor))
         self.len = len(xy)
 
     def __getitem__(self, idx):
